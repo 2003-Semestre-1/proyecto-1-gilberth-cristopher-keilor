@@ -25,26 +25,45 @@ public class CPUController {
     private ArrayList<Instruction> instructionList;
     private Memory memory;
     private ArrayList<JTextField> textFieldList;
-    private JTable contentTable;
+    private JTable instructionTable;
+    private ArrayList<String> ProgramQueue;
     public CPUController(ArrayList<JTextField> pTextFieldList){
         setTextFieldList(pTextFieldList);
     }
     
     
-    public boolean loadInstructions(String pSelectedFileRoute, JList pContentGuiList, JTable pContentTable) throws IOException{
-        
-        instructionList = FileContent.getFileContent(pSelectedFileRoute, pContentGuiList);
-        contentTable = pContentTable;
-        int necesaryMemory = instructionList.size();
-        if (this.memory.getMemorySize()>= necesaryMemory){
-            memory.updateInicialPC(necesaryMemory);
-            return true;
-        }else{return false;}
+    public boolean loadInstructions(ArrayList<String> files,JTable pContentTable) throws IOException{
+        if (files.size() == 0){ return true;}
+        else {
+            instructionTable = pContentTable;
+            instructionList = FileContent.getFileContent(files.get(0));
+            int necesaryMemory = instructionList.size();
+            if (this.memory.getMemorySize()>= necesaryMemory){
+                memory.updateInicialPC(necesaryMemory);
+                showInstrucctions();
+                return true;
+            }else{return false;}
+        }      
     }
     
+    public void showInstrucctions(){
+        DefaultTableModel tblModel = (DefaultTableModel) instructionTable.getModel();
+        int memory_position = memory.getMemoryPosition();
+        int contador = 0;
+        for (Instruction instruction: instructionList) {
+            String instrucctionCompleta = instruction.getInstructionOperator()+" "+
+                    instruction.getInstructionRegister()+ ", " +instruction.getInstructionNumberValue();
+            String data[] = {String.valueOf(contador), String.valueOf(memory_position),instrucctionCompleta,
+            String.valueOf(instruction.getInstructionWeight()),"READY"};
+            tblModel.addRow(data);
+            contador++;
+            memory_position++;
+        }
+    
+    
+    }
     public String executeInstruction(){
         if(currentInstructionPosition < instructionList.size() && memory.getAvailableInstruction()>0){ 
-            //Aqui es donde tengo que cambiar el color del fondo para saber que funcion estoy ejecutando
             Instruction instruction = instructionList.get(currentInstructionPosition);
             
             switch(instruction.getInstructionOperator()){
@@ -76,7 +95,7 @@ public class CPUController {
         textFieldList.get(5).setText(String.valueOf(pRegistersValue[3]));
         textFieldList.get(6).setText(String.valueOf(pRegistersValue[2]));
         String data[] = {String.valueOf(pRegistersValue[0]), instructionList.get(currentInstructionPosition).getBinaryCode()};
-        DefaultTableModel tblModel = (DefaultTableModel) contentTable.getModel();
+        DefaultTableModel tblModel = (DefaultTableModel) instructionTable.getModel();
         tblModel.addRow(data);
         currentInstructionPosition++;
         return "Success";
