@@ -80,11 +80,9 @@ public class Memory {
     }
    
     
-    
     public int getMemorySize() {
         return memorySize-9;
     }
-    
     
     public void setAvailableInstruction(){
         this.availableInstruction=getMemorySize();
