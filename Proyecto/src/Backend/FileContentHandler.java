@@ -13,6 +13,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
 import Models.Instruction;
+import javax.swing.JTable;
 /**
  *
  * @author jimon,Cristopher
@@ -23,8 +24,7 @@ public class FileContentHandler {
     }
     
     @SuppressWarnings("unchecked") //In this case that warinig is shown because I am parsing directly the result of new FileReader(pSelectedFileRoute)
-    public ArrayList<Instruction> getFileContent(String pSelectedFileRoute, JList pContentGuiList) throws FileNotFoundException, IOException{
-         DefaultListModel<String> listModel = new DefaultListModel<>();
+    public ArrayList<Instruction> getFileContent(String pSelectedFileRoute) throws FileNotFoundException, IOException{
          ArrayList<Instruction> instructionList= new ArrayList<Instruction>();
         try {
             BufferedReader objReader = new BufferedReader(new FileReader(pSelectedFileRoute));
@@ -36,18 +36,38 @@ public class FileContentHandler {
                     String operationName = instructionArray[0];
                     String operationRegister = instructionArray[1].substring(0, 2);
                     int operationValue = (operationName.equals("MOV")) ?  Integer.parseInt(instructionArray[2]) : 0;
-                    Instruction test = new Instruction(currentLine,operationName,operationRegister,operationValue);
+                    int weight = detectWeight(operationName);
+                    Instruction test = new Instruction(currentLine,operationName,operationRegister,operationValue,weight);
                     instructionList.add(test);   
-                    listModel.addElement(currentLine);
                 }
             }
             objReader.close();
-            pContentGuiList.setModel(listModel);
-            return instructionList;
-            
+            return instructionList; 
         } catch (IOException e) {
             System.out.println("Error: "+ e.getMessage()); //Aqui va a un mensaje de error
         }
         return instructionList;
+    }
+    
+    public int detectWeight(String OperationName){
+        switch (OperationName) {
+            case "MOV":
+            case "INC":
+            case "DEC":
+            case "SWAP":
+            case "INT":    
+            case "PUSH":    
+            case "POP":{ return 1;}
+            
+            case "LOAD":
+            case "STORE":
+            case "JMP":
+            case "JNE":{ return 2;}
+            
+            case "ADD":
+            case "SUB":
+            case "PARAM":{ return 3;}
+            default: return 0;
+        }
     }
 }
