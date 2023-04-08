@@ -29,19 +29,25 @@ public class Instruction {
     private String instructionOperator;
     private String instructionRegister;
     private int instructionNumberValue;
+    private int instructionWeight;
 
     
-    public Instruction(String pInstructionName,String pInstructionOperator,String pInstructionRegister,int pInstructionNumberValue){
+    public Instruction(String pInstructionName,String pInstructionOperator,String pInstructionRegister,int pInstructionNumberValue,int pInstructionWeight){
         setInstructionName(pInstructionName);
         setInstructionOperator (pInstructionOperator);
         setInstructionRegister(pInstructionRegister);
         setInstructionNumberValue(pInstructionNumberValue);
+        setInstructionWeight(pInstructionWeight);
         
        
     }
     
     public String getInstructionName() {
         return InstructionName;
+    }
+    
+    public int getInstructionWeight() {
+        return instructionWeight;
     }
 
     public String getInstructionOperator() {
@@ -102,6 +108,9 @@ public class Instruction {
 
     private void setInstructionNumberValue(int pInstructionNumberValue) {
         this.instructionNumberValue = pInstructionNumberValue;
+    }
+    private void setInstructionWeight(int pInstructionWeight) {
+        this.instructionWeight = pInstructionWeight;
     }
     
     
