@@ -111,4 +111,14 @@ public class Memory {
          int totalFreeSpace = this.memorySize - necesaryMemory;
          this.actualMemoryPosition = (int) ((Math.random() * (totalFreeSpace - 1)) + 1);
      }
+     
+     public void resetMemoryRegister(){
+         memoryRegister.replace("AC",0);
+         memoryRegister.replace("AX", 0);
+         memoryRegister.replace("BX",   0);
+         memoryRegister.replace("CX",  0);
+         memoryRegister.replace("DX",  0);
+         actualMemoryPosition=0;
+     
+     }
 }
