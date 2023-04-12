@@ -18,6 +18,20 @@ public class Instruction {
         put("MOV","0011");
         put("SUB","0100");
         put("ADD","0101");
+        put("INC", "0110");
+        //INC AC X?
+        put("DEC", "0111");
+        //DEC AC X?
+        put("SWAP", "1000");
+        put("INT", "1001");
+        //supongo que es una interrupción para diferentes llamadas
+        put("JMP", "1010");
+        put("CMP", "1011");
+        put("JE", "1100");
+        put("JNE", "1101");
+        //param no es una instrucción, entonces no sabría
+        put("PUSH", "1110");
+        put("POP", "1111");                                                                                                     
     }};
     static HashMap<String, String> binaryRegister = new HashMap<String, String>(){{
         put("AX","0001");
