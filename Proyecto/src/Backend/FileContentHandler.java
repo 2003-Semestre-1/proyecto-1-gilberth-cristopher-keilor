@@ -37,7 +37,9 @@ public class FileContentHandler {
                     String operationRegister = instructionArray[1].substring(0, 2);
                     int operationValue = (operationName.equals("MOV")) ?  Integer.parseInt(instructionArray[2]) : 0;
                     int weight = detectWeight(operationName);
-                    Instruction test = new Instruction(currentLine,operationName,operationRegister,operationValue,weight);
+                    Instruction test = new Instruction(currentLine,operationName,
+                            operationRegister,operationValue,
+                            weight);
                     instructionList.add(test);   
                 }
             }
