@@ -44,6 +44,7 @@ public class Instruction {
     private String instructionRegister;
     private int instructionNumberValue;
     private int instructionWeight;
+    private int instructionRemainingTime;
 
     
     public Instruction(String pInstructionName,String pInstructionOperator,String pInstructionRegister,int pInstructionNumberValue,int pInstructionWeight){
@@ -52,8 +53,7 @@ public class Instruction {
         setInstructionRegister(pInstructionRegister);
         setInstructionNumberValue(pInstructionNumberValue);
         setInstructionWeight(pInstructionWeight);
-        
-       
+        setInstructionRemainingTime(pInstructionWeight);
     }
     
     public String getInstructionName() {
@@ -62,6 +62,14 @@ public class Instruction {
     
     public int getInstructionWeight() {
         return instructionWeight;
+    }
+    
+    public int getInstructionRemainingTime() {
+        return this.instructionRemainingTime;
+    }
+    
+    public void setInstructionRemainingTime(int pInstructionRemainingTime) {
+        this.instructionRemainingTime= pInstructionRemainingTime;
     }
 
     public String getInstructionOperator() {
