@@ -5,6 +5,7 @@
 package Frontend;
 
 import Backend.CPUController;
+import Backend.CPUListener;
 import Backend.FileContentHandler;
 import Models.Instruction;
 import java.awt.Color;
@@ -26,12 +27,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author jimon
  */
-public class main_Activity extends javax.swing.JFrame {
+public class main_Activity extends javax.swing.JFrame implements CPUListener {
 
 
     private int currentInstructionPosition=0;
     private CPUController CPU1;
     private CPUController CPU2;
+    
     
     /**
      * Creates new form main_Activity
@@ -42,6 +44,10 @@ public class main_Activity extends javax.swing.JFrame {
         textfieldMemorySize.setForeground(new Color(153,153,153));
         CPU1 = new CPUController(getPanelComponents());
         CPU2 = new CPUController(getSecondPanelComponents());
+        CPU1.addListener(this);
+        CPU2.addListener(this);
+        CPU1.setCPUName("CPU1");
+        CPU2.setCPUName("CPU2");
         btnUploadFile.setEnabled(false);
         btnExecute.setEnabled(false);
         btnClean.setEnabled(false);
@@ -731,8 +737,8 @@ public class main_Activity extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEnterMemorySizeActionPerformed
 
     private void btnExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExecuteActionPerformed
-        if (CPU1.getState()==1){String code1 = CPU1.executeInstruction(); errorHandler(code1);}
-        if (CPU2.getState()==1){String code2 = CPU2.executeInstruction(); errorHandler(code2);}
+        if (CPU1.getState()==1){CPU1.executeInstruction();}
+        if (CPU2.getState()==1){CPU2.executeInstruction();}
         
         
     }//GEN-LAST:event_btnExecuteActionPerformed
@@ -879,4 +885,35 @@ public class main_Activity extends javax.swing.JFrame {
     private javax.swing.JTextField textPC1;
     private javax.swing.JTextField textfieldMemorySize;
     // End of variables declaration//GEN-END:variables
+
+    
+    
+    
+    // Beginning of Interface error listener functions
+    @Override
+    public void onNoMoreInstructionsAndPrograms(CPUController cpu) {
+         JOptionPane.showMessageDialog(this, "There are no further instructions to execute on "+cpu.getCPUName(), 
+                 "List of instructions finalised", JOptionPane.INFORMATION_MESSAGE);
+         if (CPU1.getState() == 0 && CPU2.getState()==0){
+             JOptionPane.showMessageDialog(this, "List of instructions finalised", 
+                     "There are no further instructions to execute on both cpu´s", JOptionPane.INFORMATION_MESSAGE);
+             btnExecute.setEnabled(false);
+         }
+    }
+
+    @Override
+    public void onInstructionNotImplemented(CPUController cpu) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    public void onLoadingFileError(CPUController cpu) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void onProgramChanged(CPUController cpu) {
+        detectCPUSQueue();
+    }
+    
+    
 }
