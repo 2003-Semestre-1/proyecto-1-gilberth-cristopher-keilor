@@ -82,26 +82,6 @@ public class CPUController {
     public void executeInstruction(){
         if(currentInstructionPosition < instructionList.size() && memory.getAvailableInstruction()>0){ 
             Instruction instruction = instructionList.get(currentInstructionPosition);
-<<<<<<< Updated upstream
-            switch(instruction.getInstructionOperator()){
-                case "LOAD":
-                    return fillRegistersUI(memory.executeLoad(instruction), instruction.getInstructionName());
-                case "STORE":
-                    return fillRegistersUI(memory.executeStore(instruction), instruction.getInstructionName());
-                case "MOV":
-                    return fillRegistersUI(memory.executeMov(instruction), instruction.getInstructionName());
-                case "SUB":
-                    return fillRegistersUI(memory.executeSub(instruction), instruction.getInstructionName());
-                case "ADD":
-                    return fillRegistersUI(memory.executeAdd(instruction), instruction.getInstructionName());
-                case "INC":
-                    return fillRegistersUI(memory.executeInc(instruction), instruction.getInstructionName());
-                case "DEC":
-                    return fillRegistersUI(memory.executeInc(instruction), instruction.getInstructionName());
-
-                default:
-                    return "Error00"; //Error Code 00-Instruccion not yet implemented
-=======
             int remainingTime = instruction.getInstructionRemainingTime();
             if (remainingTime !=1){instruction.setInstructionRemainingTime(remainingTime-1);}
             else {
@@ -128,7 +108,6 @@ public class CPUController {
                         notifyInstructionNotImplemented(); //Error Code 00-Instrucctions no yet implemented
                         break;
                 }
->>>>>>> Stashed changes
             }
         }
         else{
