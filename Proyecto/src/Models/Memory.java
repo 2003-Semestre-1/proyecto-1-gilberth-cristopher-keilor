@@ -66,6 +66,12 @@ public class Memory {
          return getMemoryValues();
      }
      
+     public int[] executeDec(Instruction pInstruction){
+         int acRegisterValue = memoryRegister.get("AC");
+         memoryRegister.replace("AC",   acRegisterValue-1);
+         return getMemoryValues();
+     }
+     
      public int[] getMemoryValues(){
          int[] intArray = new int[] {this.getMemoryPosition(),memoryRegister.get("AC"),memoryRegister.get("AX"),memoryRegister.get("BX"),
          memoryRegister.get("CX"),memoryRegister.get("DX")};

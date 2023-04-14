@@ -92,6 +92,9 @@ public class CPUController {
                     return fillRegistersUI(memory.executeAdd(instruction), instruction.getInstructionName());
                 case "INC":
                     return fillRegistersUI(memory.executeInc(instruction), instruction.getInstructionName());
+                case "DEC":
+                    return fillRegistersUI(memory.executeInc(instruction), instruction.getInstructionName());
+
                 default:
                     return "Error00"; //Error Code 00-Instruccion not yet implemented
             }
