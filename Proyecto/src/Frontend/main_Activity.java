@@ -6,8 +6,6 @@ package Frontend;
 
 import Backend.CPUController;
 import Backend.CPUListener;
-import Backend.FileContentHandler;
-import Models.Instruction;
 import java.awt.Color;
 import java.awt.Component;
 import java.io.File;
@@ -16,12 +14,12 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.xml.sax.Attributes;
 
 /**
  *
@@ -33,6 +31,7 @@ public class main_Activity extends javax.swing.JFrame implements CPUListener {
     private int currentInstructionPosition=0;
     private CPUController CPU1;
     private CPUController CPU2;
+    private boolean active = false;
     
     
     /**
@@ -51,6 +50,7 @@ public class main_Activity extends javax.swing.JFrame implements CPUListener {
         btnUploadFile.setEnabled(false);
         btnExecute.setEnabled(false);
         btnClean.setEnabled(false);
+        btnAutoExecute.setEnabled(false);
        
     }
 
@@ -114,6 +114,7 @@ public class main_Activity extends javax.swing.JFrame implements CPUListener {
         jLabelCPU4 = new javax.swing.JLabel();
         jLabelCPU2Programs = new javax.swing.JLabel();
         jLabelCPU1Programs = new javax.swing.JLabel();
+        btnAutoExecute = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 255, 255));
@@ -560,6 +561,14 @@ public class main_Activity extends javax.swing.JFrame implements CPUListener {
 
         jLabelCPU4.setText("Programs in queue :");
 
+        btnAutoExecute.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramImages/play.png"))); // NOI18N
+        btnAutoExecute.setText("Automatic Execution");
+        btnAutoExecute.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAutoExecuteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -584,20 +593,22 @@ public class main_Activity extends javax.swing.JFrame implements CPUListener {
                         .addComponent(jLabelCPU2Programs, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnUploadFile)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAutoExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnExecute)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnClean, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnClean, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(19, 19, 19))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(40, 40, 40)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -614,37 +625,39 @@ public class main_Activity extends javax.swing.JFrame implements CPUListener {
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUploadFile, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnClean, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextfieldScreen, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonEnter))
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane3))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelCPU1)
-                            .addComponent(jLabelCPU3)
-                            .addComponent(jLabelCPU1Programs))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jpanelCPU1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(46, 46, 46)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelCPU2)
-                            .addComponent(jLabelCPU4)
-                            .addComponent(jLabelCPU2Programs))
-                        .addGap(18, 18, 18)
-                        .addComponent(jpanelCPU2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnClean, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAutoExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(52, 52, 52)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jTextfieldScreen, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButtonEnter))
+                            .addGap(18, 18, 18)
+                            .addComponent(jScrollPane3))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabelCPU1)
+                                .addComponent(jLabelCPU3)
+                                .addComponent(jLabelCPU1Programs))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jpanelCPU1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(46, 46, 46)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabelCPU2)
+                                .addComponent(jLabelCPU4)
+                                .addComponent(jLabelCPU2Programs))
+                            .addGap(18, 18, 18)
+                            .addComponent(jpanelCPU2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(47, 47, 47)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1160, 610));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1210, 610));
 
         pack();
         setLocationRelativeTo(null);
@@ -672,6 +685,7 @@ public class main_Activity extends javax.swing.JFrame implements CPUListener {
              try {
                  if( (CPU1.loadInstructions(ProgramQueue1,jCPU1Instruccion)) &&  (CPU2.loadInstructions(ProgramQueue2,jCPU2Instruccion))){
                      btnExecute.setEnabled(true);
+                     btnAutoExecute.setEnabled(true);
                      btnClean.setEnabled(true);
                      btnUploadFile.setEnabled(false);
                      detectCPUSQueue();
@@ -736,12 +750,15 @@ public class main_Activity extends javax.swing.JFrame implements CPUListener {
     }//GEN-LAST:event_btnEnterMemorySizeActionPerformed
 
     private void btnExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExecuteActionPerformed
+        executeDualCPU();   
+    }//GEN-LAST:event_btnExecuteActionPerformed
+    
+    private void executeDualCPU(){
         if (CPU1.getState()==1){CPU1.executeInstruction();}
         if (CPU2.getState()==1){CPU2.executeInstruction();}
-        
-        
-    }//GEN-LAST:event_btnExecuteActionPerformed
-
+    }
+    
+    
     private void btnCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanActionPerformed
         this.dispose();
         main_Activity newFrame = new main_Activity();
@@ -755,6 +772,36 @@ public class main_Activity extends javax.swing.JFrame implements CPUListener {
     private void textIR1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textIR1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textIR1ActionPerformed
+
+    private void btnAutoExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAutoExecuteActionPerformed
+        active = !active;
+
+        Thread thread = new Thread(new Runnable() {
+        @Override
+            public void run() {
+                while (active) {
+                    
+                    executeDualCPU();
+
+                    // Actualizar la interfaz gráfica
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            repaint();
+                        }
+                    });
+
+                    // Agregar un delay de 2 segundos
+                    try {
+                        Thread.sleep(1000); // 2000 milisegundos = 2 segundos
+                    } catch (InterruptedException ex) {
+                        // Manejar la excepción si se interrumpe el hilo
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        });
+        thread.start();
+    }//GEN-LAST:event_btnAutoExecuteActionPerformed
 
     private ArrayList<JTextField> getPanelComponents(){
         ArrayList<JTextField> list = new ArrayList<JTextField>();
@@ -777,24 +824,7 @@ public class main_Activity extends javax.swing.JFrame implements CPUListener {
         }
         return list;
     }
-    
-    
-    
-    private void errorHandler(String code){
-        switch(code){
-            case "Error00":
-                btnExecute.setEnabled(false);
-                JOptionPane.showMessageDialog(this, "The document is not in the correct format ", "Unrecognised instruction", JOptionPane.INFORMATION_MESSAGE);
-            case "Error01":
-                btnExecute.setEnabled(false);
-                JOptionPane.showMessageDialog(this, "There are no further instructions to execute", "List of instructions finalised", JOptionPane.INFORMATION_MESSAGE); 
-            case "ProgramChanged":
-                detectCPUSQueue();
-                
-        }
-    }
-    
-    
+
     
     /**
      * @param args the command line arguments
@@ -832,6 +862,7 @@ public class main_Activity extends javax.swing.JFrame implements CPUListener {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAutoExecute;
     private javax.swing.JButton btnClean;
     private javax.swing.JButton btnEnterMemorySize;
     private javax.swing.JButton btnExecute;
@@ -897,6 +928,8 @@ public class main_Activity extends javax.swing.JFrame implements CPUListener {
              JOptionPane.showMessageDialog(this, "List of instructions finalised", 
                      "There are no further instructions to execute on both cpu´s", JOptionPane.INFORMATION_MESSAGE);
              btnExecute.setEnabled(false);
+             btnAutoExecute.setEnabled(false);
+             active = false;
          }
     }
 
