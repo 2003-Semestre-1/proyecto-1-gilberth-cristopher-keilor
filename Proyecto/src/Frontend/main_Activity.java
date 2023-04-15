@@ -720,18 +720,17 @@ public class main_Activity extends javax.swing.JFrame implements CPUListener {
 
     private void btnEnterMemorySizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnterMemorySizeActionPerformed
         String memorySizeString = textfieldMemorySize.getText();
-        
-        if(!memorySizeString.equals("Enter memory size")){
-            int memorySizeNumber= Integer.parseInt(memorySizeString);
-            if(memorySizeNumber>9){
-                CPU1.setMemorySize(memorySizeNumber);
-                CPU2.setMemorySize(memorySizeNumber);
-                btnUploadFile.setEnabled(true);
-                JOptionPane.showMessageDialog(this, "The memory has been generated with a size of "+memorySizeString, "Valid value", JOptionPane.INFORMATION_MESSAGE);
-            }else{
-                JOptionPane.showMessageDialog(this, "The entered value must be greater than 10", "Invalid value", JOptionPane.ERROR_MESSAGE);
-            }
-        }else{JOptionPane.showMessageDialog(this, "The entered value cannot be empty", "Invalid value", JOptionPane.ERROR_MESSAGE);}
+        CpuMemoryDialog popup = new CpuMemoryDialog(this, true);
+        popup.setSize(280, 210);
+        popup.setFocusable(false);
+        popup.setVisible(true);
+        int[] cpuMemorySizeArray = popup.getCpuMemorySize();
+        CPU1.setMemorySize(cpuMemorySizeArray[0]);
+        CPU2.setMemorySize(cpuMemorySizeArray[1]);
+        btnUploadFile.setEnabled(true);
+        JOptionPane.showMessageDialog(this, "The memory for CPU#1 is "+cpuMemorySizeArray[0]+"\n"+"The memory for CPU#2 is "+cpuMemorySizeArray[1],
+                "Valid value", 
+                JOptionPane.INFORMATION_MESSAGE);
       
         
     }//GEN-LAST:event_btnEnterMemorySizeActionPerformed
