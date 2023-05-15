@@ -4,7 +4,7 @@
 ## Integrantes:
 ### [2017166646-Cristopher Zúñiga Jiménez]
 ### [2017239321-Gilberth Montoya Zarate]
-### [2018319336-Keilor Martinez Rodriguez]
+
 
 
 ### Estado del proyecto: Escala de 1 a 5, 1 siendo completo y 5 deplorable

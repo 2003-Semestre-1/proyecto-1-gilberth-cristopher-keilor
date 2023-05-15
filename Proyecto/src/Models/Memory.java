@@ -75,7 +75,6 @@ public class Memory {
      public int[] getMemoryValues(){
          int[] intArray = new int[] {this.getMemoryPosition(),memoryRegister.get("AC"),memoryRegister.get("AX"),memoryRegister.get("BX"),
          memoryRegister.get("CX"),memoryRegister.get("DX")};
-          System.out.println( this.actualMemoryPosition);
          this.actualMemoryPosition++;
          this.availableInstruction--;
          return   intArray;
